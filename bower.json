@@ -1,0 +1,30 @@
+{
+  "name": "utility",
+  "version": "1.0.0",
+  "homepage": "https://github.com/patjnr/silverstripe-utility-plugins",
+  "authors": [
+    "Itayi Paul Patrick Chitovoro <patrick@chitosystems.com>"
+  ],
+  "description": "Silverstripe Utility plugins",
+  "moduleType": [
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "silverstripe",
+    "chitosystems"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.txt",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.2",
+    "owl.carousel": "*",
+    "chosen": "https://github.com/harvesthq/chosen/releases/download/v1.3.0/chosen_v1.3.0.zip"
+  }
+}
