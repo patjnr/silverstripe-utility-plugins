@@ -27,5 +27,9 @@ class Utility extends Object {
         Requirements::javascript(JQUERY_DIR . '/jquery.js');
         Requirements::javascript(JQUERY_MIGRATE_DIR . '/index.js');
     }
+    public static function includeJQueryUI() {
+        Requirements::javascript(THIRDPARTY_DIR . '/jquery-ui/jquery-ui.min.js');
+        Requirements::css(THIRDPARTY_DIR . '/jquery-ui-themes/smoothness/jquery-ui.css');
+    }
 
 }
