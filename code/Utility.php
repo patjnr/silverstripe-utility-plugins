@@ -32,4 +32,10 @@ class Utility extends Object {
         Requirements::css(THIRDPARTY_DIR . '/jquery-ui-themes/smoothness/jquery-ui.css');
     }
 
+
+    function includePlugins(){
+        Requirements::javascript(JQUERY_FORM_DIR . '/jquery-form.js');
+
+    }
+
 }
