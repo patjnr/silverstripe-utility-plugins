@@ -27,6 +27,7 @@
     "owl.carousel": "*",
     "jquery-form": "*",
     "owl.carousel": "*",
+    "underscore": "*",
     "jquery-migrate": "http://code.jquery.com/jquery-migrate-1.2.1.js",
     "chosen": "https://github.com/harvesthq/chosen/releases/download/v1.3.0/chosen_v1.3.0.zip"
   }
