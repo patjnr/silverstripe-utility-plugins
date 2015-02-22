@@ -34,7 +34,7 @@ class Utility extends Object {
 
 
     function includePlugins(){
-        Requirements::javascript(JQUERY_FORM_DIR . '/jquery-form.js');
+        Requirements::javascript(JQUERY_FORM_DIR . '/jquery.form.js');
         Requirements::javascript(UNDERSCORE_DIR . '/underscore.js');
     }
 
