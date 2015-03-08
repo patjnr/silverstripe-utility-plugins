@@ -7,8 +7,8 @@
 define('UTILITY_DIR', basename(dirname(__FILE__)));
 define('PLUGINS_DIR', UTILITY_DIR . "/plugins");
 define('UTILITY_BOWER_DIR', UTILITY_DIR . "/bower_components/");
-define('BOOTSTRAP_DIR', UTILITY_BOWER_DIR . "bootstrap/dist/");
-define('JQUERY_DIR', UTILITY_BOWER_DIR . "jquery/dist/");
+define('BOOTSTRAP_DIR', UTILITY_BOWER_DIR . "bootstrap/dist");
+define('JQUERY_DIR', UTILITY_BOWER_DIR . "jquery/dist");
 define('JQUERY_MIGRATE_DIR', UTILITY_BOWER_DIR . "jquery-migrate/");
 define('JQUERY_FORM_DIR', UTILITY_BOWER_DIR . "jquery-form/");
 define('UNDERSCORE_DIR', UTILITY_BOWER_DIR . "underscore/");
