@@ -15,3 +15,5 @@ define('UNDERSCORE_DIR', UTILITY_BOWER_DIR . "underscore/");
 define('CHOSEN_PLUGIN_DIR', UTILITY_DIR . "/chosen");
 define('REVOLUTION_SLIDER_DIR', UTILITY_DIR . "/rs-plugin");
 define('MOMENT_DIR', UTILITY_BOWER_DIR . "/moment");
+define('CHOSEN_DIR', UTILITY_BOWER_DIR . "/chosen");
+
