@@ -1,6 +1,6 @@
 <?php
 
-class SliderPack extends Object {
+class SliderPackage extends Object {
 
     function __construct() {
         parent::__construct();
