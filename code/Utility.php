@@ -8,7 +8,8 @@ class Utility extends Object
 
     static function include_code()
     {
-
+        self::includePlugins();
+        self::includeMasonry();
     }
 
     static function includeBootstrap($jquery = false)
@@ -49,7 +50,7 @@ class Utility extends Object
         Requirements::javascript(JQUERY_FORM_DIR . '/jquery.form.js');
         Requirements::javascript(UNDERSCORE_DIR . '/underscore.js');
         Requirements::javascript(MOMENT_DIR . '/moment.js');
-        self::includeMasonry();
+
     }
 
 }
