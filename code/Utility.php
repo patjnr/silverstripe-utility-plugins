@@ -19,7 +19,10 @@ class Utility extends Object
         Requirements::css(BOOTSTRAP_DIR . "/css/bootstrap.min.css");
         Requirements::javascript(BOOTSTRAP_DIR . '/js/bootstrap.js');
     }
-
+    static function includeMasonry()
+    {
+        Requirements::javascript(MASONRY_DIR . '/dist/masonry.pkgd.min.js');
+    }
     static function includeChosen()
     {
         Requirements::javascript(CHOSEN_DIR . '/chosen.jquery.min.js');
@@ -46,6 +49,7 @@ class Utility extends Object
         Requirements::javascript(JQUERY_FORM_DIR . '/jquery.form.js');
         Requirements::javascript(UNDERSCORE_DIR . '/underscore.js');
         Requirements::javascript(MOMENT_DIR . '/moment.js');
+        self::includeMasonry();
     }
 
 }
