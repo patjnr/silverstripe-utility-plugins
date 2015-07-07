@@ -52,5 +52,7 @@ class Utility extends Object
         Requirements::javascript(MOMENT_DIR . '/moment.js');
 
     }
-
+    public static function includeIsotope() {
+        Requirements::javascript(ISOTOPE_DIR . '/dist/isotope.pkgd.min.js');
+    }
 }
