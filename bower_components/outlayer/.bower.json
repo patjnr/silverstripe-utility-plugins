@@ -52,6 +52,6 @@
     "commit": "0f56e98f4d0ad0852e9969ee0802705f254b1626"
   },
   "_source": "git://github.com/metafizzy/outlayer.git",
-  "_target": "~1.4.1",
+  "_target": "~1.4.0",
   "_originalSource": "outlayer"
 }
