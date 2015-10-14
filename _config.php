@@ -18,3 +18,4 @@ define('MOMENT_DIR', UTILITY_BOWER_DIR . "moment");
 define('CHOSEN_DIR', UTILITY_BOWER_DIR . "chosen");
 define('MASONRY_DIR', UTILITY_BOWER_DIR . "masonry");
 define('ISOTOPE_DIR', UTILITY_BOWER_DIR . "isotope");
+define('DATA_TABLES_DIR', UTILITY_BOWER_DIR . "datatables");

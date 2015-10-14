@@ -60,4 +60,11 @@ class Utility extends Object
     {
         Requirements::javascript(ISOTOPE_DIR . '/dist/isotope.pkgd.min.js');
     }
+
+    public static function includeDataTables()
+    {
+        Requirements::css(DATA_TABLES_DIR . "/media/css/dataTables.bootstrap.css");
+        Requirements::javascript(DATA_TABLES_DIR . "/media/js/jquery.dataTables.min.js");
+        Requirements::javascript(DATA_TABLES_DIR . "/media/js/dataTables.bootstrap.js");
+    }
 }
