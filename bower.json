@@ -24,13 +24,14 @@
   ],
   "dependencies": {
     "bootstrap": "~3.3.2",
+    "bootstrap-sass":"*",
     "owl.carousel": "*",
     "jquery-form": "*",
     "underscore": "*",
     "moment": "*",
     "jquery-migrate": "http://code.jquery.com/jquery-migrate-1.2.1.js",
     "chosen": "https://github.com/harvesthq/chosen/releases/download/v1.3.0/chosen_v1.3.0.zip",
-    "masonry": "~3.3.0",
-    "isotope": "~2.2.1"
+    "masonry": "*",
+    "isotope": "*"
   }
 }

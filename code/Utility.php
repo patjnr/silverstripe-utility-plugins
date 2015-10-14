@@ -20,10 +20,12 @@ class Utility extends Object
         Requirements::css(BOOTSTRAP_DIR . "/css/bootstrap.min.css");
         Requirements::javascript(BOOTSTRAP_DIR . '/js/bootstrap.js');
     }
+
     static function includeMasonry()
     {
         Requirements::javascript(MASONRY_DIR . '/dist/masonry.pkgd.min.js');
     }
+
     static function includeChosen()
     {
         Requirements::javascript(CHOSEN_DIR . '/chosen.jquery.min.js');
@@ -52,7 +54,9 @@ class Utility extends Object
         Requirements::javascript(MOMENT_DIR . '/moment.js');
 
     }
-    public static function includeIsotope() {
+
+    public static function includeIsotope()
+    {
         Requirements::javascript(ISOTOPE_DIR . '/dist/isotope.pkgd.min.js');
     }
 }
