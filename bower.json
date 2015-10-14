@@ -25,6 +25,7 @@
   "dependencies": {
     "bootstrap": "~3.3.2",
     "bootstrap-sass":"*",
+    "datatables":"*",
     "owl.carousel": "*",
     "jquery-form": "*",
     "components-font-awesome": "*",
