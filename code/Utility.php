@@ -52,6 +52,7 @@ class Utility extends Object
         Requirements::javascript(JQUERY_FORM_DIR . '/jquery.form.js');
         Requirements::javascript(UNDERSCORE_DIR . '/underscore.js');
         Requirements::javascript(MOMENT_DIR . '/moment.js');
+        Requirements::css(UTILITY_BOWER_DIR . '/components-font-awesome/css/font-awesome.min.css');
 
     }
 

@@ -27,6 +27,7 @@
     "bootstrap-sass":"*",
     "owl.carousel": "*",
     "jquery-form": "*",
+    "components-font-awesome": "*",
     "underscore": "*",
     "moment": "*",
     "jquery-migrate": "http://code.jquery.com/jquery-migrate-1.2.1.js",
