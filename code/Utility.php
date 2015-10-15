@@ -10,8 +10,10 @@ class Utility extends Object
     {
         self::includePlugins();
         self::includeMasonry();
-        Requirements::javascript(UTILITY_DIR . '/js/jquery.debouncedresize.js');
-        Requirements::javascript(UTILITY_DIR . '/js/jquery.throttledresize.js');
+
+        Requirements::javascript(UTILITY_DIR . '/js/smartresize.js');
+
+
     }
 
     static function includeBootstrap($jquery = false)
