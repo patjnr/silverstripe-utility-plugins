@@ -28,6 +28,7 @@
     "datatables": "*",
     "owl.carousel": "*",
     "jquery-form": "*",
+    "jquery-ui": "*",
     "components-font-awesome": "*",
     "underscore": "*",
     "moment": "*",
