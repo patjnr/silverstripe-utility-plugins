@@ -41,7 +41,7 @@ class Utility extends Object
     {
         Requirements::block(THIRDPARTY_DIR . "/jquery/jquery.js");
         Requirements::javascript(JQUERY_DIR . '/jquery.js');
-        Requirements::javascript(JQUERY_MIGRATE_DIR . '/index.js');
+        //Requirements::javascript(JQUERY_MIGRATE_DIR . '/index.js');
     }
 
     public static function includeJQueryUI()
