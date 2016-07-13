@@ -1,23 +1,22 @@
 /*!
- * Isotope v2.2.2
+ * Isotope v3.0.1
  *
  * Licensed GPLv3 for open source use
  * or Isotope Commercial License for commercial use
  *
  * http://isotope.metafizzy.co
- * Copyright 2015 Metafizzy
+ * Copyright 2016 Metafizzy
  */
 
 ( function( window, factory ) {
-  'use strict';
   // universal module definition
-
+  /* jshint strict: false */ /*globals define, module, require */
   if ( typeof define == 'function' && define.amd ) {
     // AMD
     define( [
         'outlayer/outlayer',
         'get-size/get-size',
-        'matches-selector/matches-selector',
+        'desandro-matches-selector/matches-selector',
         'fizzy-ui-utils/utils',
         './item',
         './layout-mode',
@@ -29,7 +28,7 @@
       function( Outlayer, getSize, matchesSelector, utils, Item, LayoutMode ) {
         return factory( window, Outlayer, getSize, matchesSelector, utils, Item, LayoutMode );
       });
-  } else if ( typeof exports == 'object' ) {
+  } else if ( typeof module == 'object' && module.exports ) {
     // CommonJS
     module.exports = factory(
       window,
@@ -76,21 +75,11 @@ var trim = String.prototype.trim ?
     return str.replace( /^\s+|\s+$/g, '' );
   };
 
-var docElem = document.documentElement;
-
-var getText = docElem.textContent ?
-  function( elem ) {
-    return elem.textContent;
-  } :
-  function( elem ) {
-    return elem.innerText;
-  };
-
 // -------------------------- isotopeDefinition -------------------------- //
 
   // create an Outlayer layout class
   var Isotope = Outlayer.create( 'isotope', {
-    layoutMode: "masonry",
+    layoutMode: 'masonry',
     isJQueryFiltering: true,
     sortAscending: true
   });
@@ -98,7 +87,9 @@ var getText = docElem.textContent ?
   Isotope.Item = Item;
   Isotope.LayoutMode = LayoutMode;
 
-  Isotope.prototype._create = function() {
+  var proto = Isotope.prototype;
+
+  proto._create = function() {
     this.itemGUID = 0;
     // functions that sort items
     this._sorters = {};
@@ -118,17 +109,17 @@ var getText = docElem.textContent ?
     }
   };
 
-  Isotope.prototype.reloadItems = function() {
+  proto.reloadItems = function() {
     // reset item ID counter
     this.itemGUID = 0;
     // call super
     Outlayer.prototype.reloadItems.call( this );
   };
 
-  Isotope.prototype._itemize = function() {
+  proto._itemize = function() {
     var items = Outlayer.prototype._itemize.apply( this, arguments );
     // assign ID for original-order
-    for ( var i=0, len = items.length; i < len; i++ ) {
+    for ( var i=0; i < items.length; i++ ) {
       var item = items[i];
       item.id = this.itemGUID++;
     }
@@ -139,7 +130,7 @@ var getText = docElem.textContent ?
 
   // -------------------------- layout -------------------------- //
 
-  Isotope.prototype._initLayoutMode = function( name ) {
+  proto._initLayoutMode = function( name ) {
     var Mode = LayoutMode.modes[ name ];
     // set mode options
     // HACK extend initial options, back-fill in default options
@@ -151,9 +142,9 @@ var getText = docElem.textContent ?
   };
 
 
-  Isotope.prototype.layout = function() {
+  proto.layout = function() {
     // if first time doing layout, do all magic
-    if ( !this._isLayoutInited && this.options.isInitLayout ) {
+    if ( !this._isLayoutInited && this._getOption('initLayout') ) {
       this.arrange();
       return;
     }
@@ -161,7 +152,7 @@ var getText = docElem.textContent ?
   };
 
   // private method to be used in layout() & magic()
-  Isotope.prototype._layout = function() {
+  proto._layout = function() {
     // don't animate first layout
     var isInstant = this._getIsInstant();
     // layout flow
@@ -174,7 +165,7 @@ var getText = docElem.textContent ?
   };
 
   // filter + sort + layout
-  Isotope.prototype.arrange = function( opts ) {
+  proto.arrange = function( opts ) {
     // set any options pass
     this.option( opts );
     this._getIsInstant();
@@ -184,39 +175,39 @@ var getText = docElem.textContent ?
     var filtered = this._filter( this.items );
     this.filteredItems = filtered.matches;
 
-    var _this = this;
-    function hideReveal() {
-      _this.reveal( filtered.needReveal );
-      _this.hide( filtered.needHide );
-    }
-
     this._bindArrangeComplete();
 
     if ( this._isInstant ) {
-      this._noTransition( hideReveal );
+      this._noTransition( this._hideReveal, [ filtered ] );
     } else {
-      hideReveal();
+      this._hideReveal( filtered );
     }
 
     this._sort();
     this._layout();
   };
   // alias to _init for main plugin method
-  Isotope.prototype._init = Isotope.prototype.arrange;
+  proto._init = proto.arrange;
+
+  proto._hideReveal = function( filtered ) {
+    this.reveal( filtered.needReveal );
+    this.hide( filtered.needHide );
+  };
 
   // HACK
   // Don't animate/transition first layout
   // Or don't animate/transition other layouts
-  Isotope.prototype._getIsInstant = function() {
-    var isInstant = this.options.isLayoutInstant !== undefined ?
-      this.options.isLayoutInstant : !this._isLayoutInited;
+  proto._getIsInstant = function() {
+    var isLayoutInstant = this._getOption('layoutInstant');
+    var isInstant = isLayoutInstant !== undefined ? isLayoutInstant :
+      !this._isLayoutInited;
     this._isInstant = isInstant;
     return isInstant;
   };
 
   // listen for layoutComplete, hideComplete and revealComplete
   // to trigger arrangeComplete
-  Isotope.prototype._bindArrangeComplete = function() {
+  proto._bindArrangeComplete = function() {
     // listen for 3 events to trigger arrangeComplete
     var isLayoutComplete, isHideComplete, isRevealComplete;
     var _this = this;
@@ -241,7 +232,7 @@ var getText = docElem.textContent ?
 
   // -------------------------- filter -------------------------- //
 
-  Isotope.prototype._filter = function( items ) {
+  proto._filter = function( items ) {
     var filter = this.options.filter;
     filter = filter || '*';
     var matches = [];
@@ -251,7 +242,7 @@ var getText = docElem.textContent ?
     var test = this._getFilterTest( filter );
 
     // test each item
-    for ( var i=0, len = items.length; i < len; i++ ) {
+    for ( var i=0; i < items.length; i++ ) {
       var item = items[i];
       if ( item.isIgnored ) {
         continue;
@@ -280,7 +271,7 @@ var getText = docElem.textContent ?
   };
 
   // get a jQuery, function, or a matchesSelector test given the filter
-  Isotope.prototype._getFilterTest = function( filter ) {
+  proto._getFilterTest = function( filter ) {
     if ( jQuery && this.options.isJQueryFiltering ) {
       // use jQuery
       return function( item ) {
@@ -305,7 +296,7 @@ var getText = docElem.textContent ?
    * @params {Array} elems
    * @public
    */
-  Isotope.prototype.updateSortData = function( elems ) {
+  proto.updateSortData = function( elems ) {
     // get items
     var items;
     if ( elems ) {
@@ -320,7 +311,7 @@ var getText = docElem.textContent ?
     this._updateItemsSortData( items );
   };
 
-  Isotope.prototype._getSorters = function() {
+  proto._getSorters = function() {
     var getSortData = this.options.getSortData;
     for ( var key in getSortData ) {
       var sorter = getSortData[ key ];
@@ -332,7 +323,7 @@ var getText = docElem.textContent ?
    * @params {Array} items - of Isotope.Items
    * @private
    */
-  Isotope.prototype._updateItemsSortData = function( items ) {
+  proto._updateItemsSortData = function( items ) {
     // do not update if no items
     var len = items && items.length;
 
@@ -380,20 +371,18 @@ var getText = docElem.textContent ?
 
     // get an attribute getter, or get text of the querySelector
     function getValueGetter( attr, query ) {
-      var getValue;
       // if query looks like [foo-bar], get attribute
       if ( attr ) {
-        getValue = function( elem ) {
+        return function getAttribute( elem ) {
           return elem.getAttribute( attr );
         };
-      } else {
-        // otherwise, assume its a querySelector, and get its text
-        getValue = function( elem ) {
-          var child = elem.querySelector( query );
-          return child && getText( child );
-        };
       }
-      return getValue;
+
+      // otherwise, assume its a querySelector, and get its text
+      return function getChildText( elem ) {
+        var child = elem.querySelector( query );
+        return child && child.textContent;
+      };
     }
 
     return mungeSorter;
@@ -412,7 +401,7 @@ var getText = docElem.textContent ?
   // ----- sort method ----- //
 
   // sort filteredItem order
-  Isotope.prototype._sort = function() {
+  proto._sort = function() {
     var sortByOpt = this.options.sortBy;
     if ( !sortByOpt ) {
       return;
@@ -433,7 +422,7 @@ var getText = docElem.textContent ?
   function getItemSorter( sortBys, sortAsc ) {
     return function sorter( itemA, itemB ) {
       // cycle through all sortKeys
-      for ( var i = 0, len = sortBys.length; i < len; i++ ) {
+      for ( var i = 0; i < sortBys.length; i++ ) {
         var sortBy = sortBys[i];
         var a = itemA.sortData[ sortBy ];
         var b = itemB.sortData[ sortBy ];
@@ -451,7 +440,7 @@ var getText = docElem.textContent ?
   // -------------------------- methods -------------------------- //
 
   // get layout mode
-  Isotope.prototype._mode = function() {
+  proto._mode = function() {
     var layoutMode = this.options.layoutMode;
     var mode = this.modes[ layoutMode ];
     if ( !mode ) {
@@ -464,32 +453,32 @@ var getText = docElem.textContent ?
     return mode;
   };
 
-  Isotope.prototype._resetLayout = function() {
+  proto._resetLayout = function() {
     // trigger original reset layout
     Outlayer.prototype._resetLayout.call( this );
     this._mode()._resetLayout();
   };
 
-  Isotope.prototype._getItemLayoutPosition = function( item  ) {
+  proto._getItemLayoutPosition = function( item  ) {
     return this._mode()._getItemLayoutPosition( item );
   };
 
-  Isotope.prototype._manageStamp = function( stamp ) {
+  proto._manageStamp = function( stamp ) {
     this._mode()._manageStamp( stamp );
   };
 
-  Isotope.prototype._getContainerSize = function() {
+  proto._getContainerSize = function() {
     return this._mode()._getContainerSize();
   };
 
-  Isotope.prototype.needsResizeLayout = function() {
+  proto.needsResizeLayout = function() {
     return this._mode().needsResizeLayout();
   };
 
   // -------------------------- adding & removing -------------------------- //
 
   // HEADS UP overwrites default Outlayer appended
-  Isotope.prototype.appended = function( elems ) {
+  proto.appended = function( elems ) {
     var items = this.addItems( elems );
     if ( !items.length ) {
       return;
@@ -501,7 +490,7 @@ var getText = docElem.textContent ?
   };
 
   // HEADS UP overwrites default Outlayer prepended
-  Isotope.prototype.prepended = function( elems ) {
+  proto.prepended = function( elems ) {
     var items = this._itemize( elems );
     if ( !items.length ) {
       return;
@@ -518,7 +507,7 @@ var getText = docElem.textContent ?
     this.items = items.concat( this.items );
   };
 
-  Isotope.prototype._filterRevealAdded = function( items ) {
+  proto._filterRevealAdded = function( items ) {
     var filtered = this._filter( items );
     this.hide( filtered.needHide );
     // reveal all new items
@@ -532,7 +521,7 @@ var getText = docElem.textContent ?
    * Filter, sort, and layout newly-appended item elements
    * @param {Array or NodeList or Element} elems
    */
-  Isotope.prototype.insert = function( elems ) {
+  proto.insert = function( elems ) {
     var items = this.addItems( elems );
     if ( !items.length ) {
       return;
@@ -558,28 +547,25 @@ var getText = docElem.textContent ?
     this.reveal( filteredInsertItems );
   };
 
-  var _remove = Isotope.prototype.remove;
-  Isotope.prototype.remove = function( elems ) {
+  var _remove = proto.remove;
+  proto.remove = function( elems ) {
     elems = utils.makeArray( elems );
     var removeItems = this.getItems( elems );
     // do regular thing
     _remove.call( this, elems );
     // bail if no items to remove
     var len = removeItems && removeItems.length;
-    if ( !len ) {
-      return;
-    }
     // remove elems from filteredItems
-    for ( var i=0; i < len; i++ ) {
+    for ( var i=0; len && i < len; i++ ) {
       var item = removeItems[i];
       // remove item from collection
       utils.removeFrom( this.filteredItems, item );
     }
   };
 
-  Isotope.prototype.shuffle = function() {
+  proto.shuffle = function() {
     // update random sortData
-    for ( var i=0, len = this.items.length; i < len; i++ ) {
+    for ( var i=0; i < this.items.length; i++ ) {
       var item = this.items[i];
       item.sortData.random = Math.random();
     }
@@ -592,16 +578,17 @@ var getText = docElem.textContent ?
    * trigger fn without transition
    * kind of hacky to have this in the first place
    * @param {Function} fn
+   * @param {Array} args
    * @returns ret
    * @private
    */
-  Isotope.prototype._noTransition = function( fn ) {
+  proto._noTransition = function( fn, args ) {
     // save transitionDuration before disabling
     var transitionDuration = this.options.transitionDuration;
     // disable transition
     this.options.transitionDuration = 0;
     // do it
-    var returnValue = fn.call( this );
+    var returnValue = fn.apply( this, args );
     // re-enable transition for reveal
     this.options.transitionDuration = transitionDuration;
     return returnValue;
@@ -613,12 +600,10 @@ var getText = docElem.textContent ?
    * getter method for getting filtered item elements
    * @returns {Array} elems - collection of item elements
    */
-  Isotope.prototype.getFilteredItemElements = function() {
-    var elems = [];
-    for ( var i=0, len = this.filteredItems.length; i < len; i++ ) {
-      elems.push( this.filteredItems[i].element );
-    }
-    return elems;
+  proto.getFilteredItemElements = function() {
+    return this.filteredItems.map( function( item ) {
+      return item.element;
+    });
   };
 
   // -----  ----- //

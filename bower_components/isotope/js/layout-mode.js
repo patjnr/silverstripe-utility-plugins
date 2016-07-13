@@ -3,9 +3,8 @@
  */
 
 ( function( window, factory ) {
-  'use strict';
   // universal module definition
-
+  /* jshint strict: false */ /*globals define, module, require */
   if ( typeof define == 'function' && define.amd ) {
     // AMD
     define( [
@@ -13,7 +12,7 @@
         'outlayer/outlayer'
       ],
       factory );
-  } else if ( typeof exports == 'object' ) {
+  } else if ( typeof module == 'object' && module.exports ) {
     // CommonJS
     module.exports = factory(
       require('get-size'),
@@ -43,36 +42,32 @@
     }
   }
 
+  var proto = LayoutMode.prototype;
+
   /**
    * some methods should just defer to default Outlayer method
    * and reference the Isotope instance as `this`
   **/
-  ( function() {
-    var facadeMethods = [
-      '_resetLayout',
-      '_getItemLayoutPosition',
-      '_manageStamp',
-      '_getContainerSize',
-      '_getElementOffset',
-      'needsResizeLayout'
-    ];
+  var facadeMethods = [
+    '_resetLayout',
+    '_getItemLayoutPosition',
+    '_manageStamp',
+    '_getContainerSize',
+    '_getElementOffset',
+    'needsResizeLayout',
+    '_getOption'
+  ];
 
-    for ( var i=0, len = facadeMethods.length; i < len; i++ ) {
-      var methodName = facadeMethods[i];
-      LayoutMode.prototype[ methodName ] = getOutlayerMethod( methodName );
-    }
-
-    function getOutlayerMethod( methodName ) {
-      return function() {
-        return Outlayer.prototype[ methodName ].apply( this.isotope, arguments );
-      };
-    }
-  })();
+  facadeMethods.forEach( function( methodName ) {
+    proto[ methodName ] = function() {
+      return Outlayer.prototype[ methodName ].apply( this.isotope, arguments );
+    };
+  });
 
   // -----  ----- //
 
   // for horizontal layout modes, check vertical size
-  LayoutMode.prototype.needsVerticalResizeLayout = function() {
+  proto.needsVerticalResizeLayout = function() {
     // don't trigger if size did not change
     var size = getSize( this.isotope.element );
     // check that this.size and size are there
@@ -83,15 +78,15 @@
 
   // ----- measurements ----- //
 
-  LayoutMode.prototype._getMeasurement = function() {
+  proto._getMeasurement = function() {
     this.isotope._getMeasurement.apply( this, arguments );
   };
 
-  LayoutMode.prototype.getColumnWidth = function() {
+  proto.getColumnWidth = function() {
     this.getSegmentSize( 'column', 'Width' );
   };
 
-  LayoutMode.prototype.getRowHeight = function() {
+  proto.getRowHeight = function() {
     this.getSegmentSize( 'row', 'Height' );
   };
 
@@ -100,7 +95,7 @@
    * segment: 'column' or 'row'
    * size 'Width' or 'Height'
   **/
-  LayoutMode.prototype.getSegmentSize = function( segment, size ) {
+  proto.getSegmentSize = function( segment, size ) {
     var segmentName = segment + size;
     var outerSize = 'outer' + size;
     // columnWidth / outerWidth // rowHeight / outerHeight
@@ -116,18 +111,18 @@
       this.isotope.size[ 'inner' + size ];
   };
 
-  LayoutMode.prototype.getFirstItemSize = function() {
+  proto.getFirstItemSize = function() {
     var firstItem = this.isotope.filteredItems[0];
     return firstItem && firstItem.element && getSize( firstItem.element );
   };
 
   // ----- methods that should reference isotope ----- //
 
-  LayoutMode.prototype.layout = function() {
+  proto.layout = function() {
     this.isotope.layout.apply( this.isotope, arguments );
   };
 
-  LayoutMode.prototype.getSize = function() {
+  proto.getSize = function() {
     this.isotope.getSize();
     this.size = this.isotope.size;
   };
@@ -142,7 +137,8 @@
       LayoutMode.apply( this, arguments );
     }
 
-    Mode.prototype = new LayoutMode();
+    Mode.prototype = Object.create( proto );
+    Mode.prototype.constructor = Mode;
 
     // default options
     if ( options ) {

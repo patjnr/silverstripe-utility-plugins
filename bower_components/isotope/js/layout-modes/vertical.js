@@ -3,15 +3,15 @@
  */
 
 ( function( window, factory ) {
-  'use strict';
   // universal module definition
+  /* jshint strict: false */ /*globals define, module, require */
   if ( typeof define == 'function' && define.amd ) {
     // AMD
     define( [
         '../layout-mode'
       ],
       factory );
-  } else if ( typeof exports == 'object' ) {
+  } else if ( typeof module == 'object' && module.exports ) {
     // CommonJS
     module.exports = factory(
       require('../layout-mode')
@@ -30,11 +30,13 @@ var Vertical = LayoutMode.create( 'vertical', {
   horizontalAlignment: 0
 });
 
-Vertical.prototype._resetLayout = function() {
+var proto = Vertical.prototype;
+
+proto._resetLayout = function() {
   this.y = 0;
 };
 
-Vertical.prototype._getItemLayoutPosition = function( item ) {
+proto._getItemLayoutPosition = function( item ) {
   item.getSize();
   var x = ( this.isotope.size.innerWidth - item.size.outerWidth ) *
     this.options.horizontalAlignment;
@@ -43,7 +45,7 @@ Vertical.prototype._getItemLayoutPosition = function( item ) {
   return { x: x, y: y };
 };
 
-Vertical.prototype._getContainerSize = function() {
+proto._getContainerSize = function() {
   return { height: this.y };
 };
 
