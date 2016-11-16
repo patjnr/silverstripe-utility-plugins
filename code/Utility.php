@@ -46,7 +46,7 @@ class Utility extends Object
 
     public static function includeJQueryUI()
     {     
-        Requirements::javascript('framework/thirdparty/jquery-ui/jquery-ui.js');
+        Requirements::block('framework/thirdparty/jquery-ui/jquery-ui.js');
         Requirements::javascript(JQUERY_UI_DIR . '/jquery-ui.min.js');
         Requirements::css(JQUERY_UI_DIR . '/themes/smoothness/jquery-ui.min.css');
     }
