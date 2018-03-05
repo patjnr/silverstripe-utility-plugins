@@ -8,10 +8,10 @@ class Utility extends Object
 
     static function include_code()
     {
-        self::includePlugins();
+        //self::includePlugins();
         self::includeMasonry();
 
-        Requirements::javascript(UTILITY_DIR . '/js/smartresize.js');
+        //Requirements::javascript(UTILITY_DIR . '/js/smartresize.js');
 
 
     }
