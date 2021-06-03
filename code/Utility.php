@@ -3,7 +3,7 @@
 /**
  * Class Utility
  */
-class Utility extends Object
+class Utility extends SS_Object
 {
 
     static function include_code()
